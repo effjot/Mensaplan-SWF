@@ -1,22 +1,26 @@
 {
-  "Mensa Menu SWF": "Mensaplan SWF",
+  "Mensa Menu SWF":  "Mensaplan SWF",
   "No Data – Press Update": "Keine Daten – bitte aktualisieren",
-  "Update": "Aktualisieren",
-  "Clear DB": "Datenbank löschen",
-  "Preferences...": "Einstellungen",
-  "About...": "Über Mensaplan…",
+  "Update":          "Aktualisieren",
+  "Clear DB":        "Datenbank löschen",
+  "Preferences":     "Einstellungen",
+  "About":           "Über",
   "Copyright 2011 code-devils.de and": "Copyright 2011 code-devils.de und",
+  "Menus taken from the website of the":
+      "Speisepläne abgerufen von der Webseite des",
+  "Studentenwerk Frankfurt:"
+      "Studentenwerks Frankfurt.",
   "Clear database?": "Heruntergeladene Speisepläne löschen?",
   "No internet connection available.": "Keine Internetverbindung verfügbar.",
   "Timeout reached. Couldn't download data.":
-    "Zeitüberschreitung, konnte keine Daten herunterladen",
+      "Zeitüberschreitung, konnte keine Daten herunterladen",
   "Malformed website content: no date field found.":
-    "Inhalt der Website entspricht nicht erwartetem Aufbau: kein Datumsfeld gefunden.",
+      "Inhalt der Website entspricht nicht erwartetem Aufbau: kein Datumsfeld gefunden.",
   "Webpage couldn't be found.": "Webseite konnte nicht gefunden werden.",
-  "Words": "Wörter",
-  "Yes": "Ja",
-  "No": "Nein",
-  "Show": "zeigen",
-  "Hide": "keine",
-  "Add...": "Hinzufügen…"
+  "Words":           "Wörter",
+  "Yes":             "Ja",
+  "No":              "Nein",
+  "Show":            "zeigen",
+  "Hide":            "keine",
+  "Add…":            "Hinzufügen…"
 }
