@@ -21,12 +21,14 @@ function PreferencesAssistant(mainScene) {
 
 
 PreferencesAssistant.prototype.setup = function() {
-    // supress app menu
+    // app menu
     this.appMenuAttr = {omitDefaultItems: true};
-	this.appMenuModel = {
-            visible: false,
-            items: []
-        };
+    this.appMenuModel = {
+        visible: true,
+        items: [
+            { label: $L('About...'), command: 'do-about' }
+        ]
+    };
     this.controller.setupWidget(Mojo.Menu.appMenu, this.appMenuAttr, this.appMenuModel);
 
     // initialize preferences
@@ -169,4 +171,33 @@ PreferencesAssistant.prototype.listChangeHandler = function(event) {
 
 PreferencesAssistant.prototype.processWords = function() {
 	this.mainScene.depot.simpleAdd("filterWords", this.wordsModel.items);
+}
+
+
+
+PreferencesAssistant.prototype.handleCommand = function(event) {
+    if (event.type == Mojo.Event.command) {
+	this.cmd = event.command;
+
+	switch(this.cmd) {
+        case 'do-about':
+            this.controller.showAlertDialog({
+                onChoose: function(value) {},
+                title: $L(Mojo.Controller.appInfo.title) + " "
+                    + Mojo.Controller.appInfo.version,
+                message: $L("Copyright 2011 code-devils.de and") + " "
+                    + Mojo.Controller.appInfo.vendor
+                    + ".<br><a href='" + Mojo.Controller.appInfo.vendorurl + "'>"
+                    + Mojo.Controller.appInfo.vendorurl + "</a>",
+                allowHTMLMessage: true,
+                choices:[
+                    {label:$L("OK"), value:""}
+                ]
+            });
+            break;
+
+        default:
+            break;
+        }
+    }
 }
