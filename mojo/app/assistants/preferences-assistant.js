@@ -26,7 +26,7 @@ PreferencesAssistant.prototype.setup = function() {
     this.appMenuModel = {
         visible: true,
         items: [
-            { label: $L('About...'), command: 'do-about' }
+            { label: $L('About'), command: 'do-about' }
         ]
     };
     this.controller.setupWidget(Mojo.Menu.appMenu, this.appMenuAttr, this.appMenuModel);
