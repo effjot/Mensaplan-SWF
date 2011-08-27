@@ -1,7 +1,6 @@
 {
     "id":       "net.effjot.mensaplanswf",
     "title":    "Mensaplan SWF",
-    "vendor":    "Florian Jenn und code-devils.de",
     "keywords":  [ "Mensaplan", "Studentenwerk", "Frankfurt",
                    "Cottbus", "Senftenberg", "Eberswalde" ],
     "main":      "../../index.html",
