@@ -41,12 +41,12 @@ MainAssistant.prototype.setup = function() {
     // title
     this.controller.get('essenDatum').innerText = this.noDataString;
 
-    // update-button
+    // update button
     this.buttonAttributes = {};
     this.buttonModel = {label: $L('Update'), buttonClass: 'primary', disabled: true};
     this.controller.setupWidget("buttonUpdate", this.buttonAttributes, this.buttonModel);
-	Mojo.Event.listen(this.controller.get('buttonUpdate'), Mojo.Event.tap, this.update.bind(this));
-	
+    this.updateHandler = this.update.bind(this);
+
     // possibility to show command menu on request (tap)
     //Mojo.Event.listen(this.controller.get('essenListe'), Mojo.Event.tap, this.listtap.bind(this));
     
@@ -91,7 +91,6 @@ MainAssistant.prototype.setup = function() {
 
     // flick event for next/prev date
     this.flickHandler = this.flickNextPrev.bind(this)
-    Mojo.Event.listen(this.controller.document, Mojo.Event.flick, this.flickHandler);
 
 }
 
@@ -350,9 +349,12 @@ MainAssistant.prototype.activate = function(event) {
     this.depot.get("keys", this.dbGetKeysSuccess.bind(this), this.dbGetKeysFailure.bind(this));
     this.updateCommandMenu();
     //this.setButtonStatus(false);
+    Mojo.Event.listen(this.controller.get('buttonUpdate'), Mojo.Event.tap, this.updateHandler);
+    Mojo.Event.listen(this.controller.document, Mojo.Event.flick, this.flickHandler);
 }
 
 MainAssistant.prototype.deactivate = function(event) {
+    Mojo.Event.stopListening(this.controller.get('buttonUpdate'), Mojo.Event.tap, this.updateHandler);
     Mojo.Event.stopListening(this.controller.document, Mojo.Event.flick, this.flickHandler);
 }
 
@@ -426,7 +428,7 @@ MainAssistant.prototype.dbDisplayEntry = function(result) {
     if (result != null) {
         for (var i = 0; i < result.length; i++) {
             var essen = result[i];
-            var titlestring = essen.title;
+            var titlestring = $L(essen.title);
             var descstring = essen.desc;
             var imgstring = essen.img;
 			
