@@ -94,7 +94,7 @@ PreferencesAssistant.prototype.setup = function() {
 						  	listTemplate: 'preferences/listcontainer', 
 						 	swipeToDelete: true, 
 						 	emptyTemplate: 'preferences/emptylist',
-							addItemLabel: $L('Add...')},
+							addItemLabel: $L('Add…')},
 					      this.wordsModel);
 	
 	// Watch relevant list events
@@ -173,31 +173,3 @@ PreferencesAssistant.prototype.processWords = function() {
 	this.mainScene.depot.simpleAdd("filterWords", this.wordsModel.items);
 }
 
-
-
-PreferencesAssistant.prototype.handleCommand = function(event) {
-    if (event.type == Mojo.Event.command) {
-	this.cmd = event.command;
-
-	switch(this.cmd) {
-        case 'do-about':
-            this.controller.showAlertDialog({
-                onChoose: function(value) {},
-                title: $L(Mojo.Controller.appInfo.title) + " "
-                    + Mojo.Controller.appInfo.version,
-                message: $L("Copyright 2011 code-devils.de and") + " "
-                    + Mojo.Controller.appInfo.vendor
-                    + ".<br><a href='" + Mojo.Controller.appInfo.vendorurl + "'>"
-                    + Mojo.Controller.appInfo.vendorurl + "</a>",
-                allowHTMLMessage: true,
-                choices:[
-                    {label:$L("OK"), value:""}
-                ]
-            });
-            break;
-
-        default:
-            break;
-        }
-    }
-}
