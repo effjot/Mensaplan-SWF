@@ -1,0 +1,39 @@
+.food-icon {
+  margin: 10px 10px 0px 20px;
+  float: left;
+}
+
+.pref-icon {
+  margin: 10px 10px 0px 20px;
+  float: left;
+}
+
+.feedSpinner {
+    position: relative;
+}
+
+
+/* Scroll Fades */
+
+/* html, body { */
+/*     height: 100%; */
+/* } */
+
+.scroll-fade {
+    height: 54px;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    /*z-index: 100000;*/
+    -webkit-palm-mouse-target: ignore;
+}
+
+.scroll-fade.top {
+    top: 0px;
+    background: url(../images/fade-top.png) repeat-x center bottom;
+}
+
+.scroll-fade.bottom {
+    bottom: 0px;
+    background: url(../images/fade-bottom.png) repeat-x center bottom;
+}

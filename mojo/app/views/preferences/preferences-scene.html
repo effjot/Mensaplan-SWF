@@ -1,0 +1,51 @@
+<div class="palm-page-header multi-line">
+  <div class="palm-page-header-wrapper">
+    <div class="pref-icon"><img src="images/icon_pref.png"></img></div>
+    <div class="title" x-mojo-loc=''>Mensa Menu Preferences</div>
+  </div>
+</div>
+
+<div class="palm-group">
+  <div class="palm-group-title" x-mojo-loc="">General</div>
+  <div class="palm-list">
+    <div class="palm-row first">
+      <div class="palm-row-wrapper">
+        <div x-mojo-element="ListSelector" id="selectorMensa"></div>
+      </div>
+    </div>
+    <div class="palm-row last">
+      <div class="palm-row-wrapper">
+        <div x-mojo-element="ToggleButton" class="togglebuttonClass"
+             id="togglebuttonImg" name="togglebuttonImg"></div>
+        <div class="title" x-mojo-loc="">Food images</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="palm-group">
+  <div class="palm-group-title" x-mojo-loc="">Filter</div>
+  <div class="palm-list">
+    <div class="palm-row first">
+      <div class="palm-row-wrapper">
+        <div x-mojo-element="ToggleButton" class="togglebuttonClass"
+             id="togglebuttonFilter" name="togglebuttonFilter"></div>
+        <div class="title" x-mojo-loc="">Filter food</div>
+      </div>
+    </div>
+    <div class="palm-row">
+      <div class="palm-row-wrapper">
+        <div x-mojo-element="ToggleButton" class="togglebuttonClass"
+             id="togglebuttonWhole" name="togglebuttonWhole"></div>
+        <div class="title" x-mojo-loc="">Whole words only</div>
+      </div>
+    </div>
+    <div class="palm-row last">
+      <div class="palm-row-wrapper">
+        <div id="editableListContainer">
+          <div id="wordsList" x-mojo-element="List"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

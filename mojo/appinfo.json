@@ -1,0 +1,16 @@
+{
+    "id":        "net.effjot.mensaplanswf",
+    "version":   "0.5.4",
+    "title":     "Mensa Menu SWF",
+    "vendor":    "Florian Jenn and code-devils.de",
+    "vendorurl": "http://www.effjot.net/",
+    "keywords":  [ "Mensa Menu", "Studentenwerk", "Frankfurt",
+                   "Cottbus", "Senftenberg", "Eberswalde" ],
+    "main":      "index.html",
+    "icon":      "images/icon.png",
+    "miniicon":  "images/miniicon.png",
+    "type":      "web",
+    "theme":     "light",
+    "noWindow":   false,
+    "noDeprecatedStyles":true
+}

@@ -1,0 +1,10 @@
+{
+    "id":       "net.effjot.mensaplanswf",
+    "title":    "Mensaplan SWF",
+    "vendorurl": "http://www.effjot.net/",
+    "keywords":  [ "Mensaplan", "Studentenwerk", "Frankfurt",
+                   "Cottbus", "Senftenberg", "Eberswalde" ],
+    "main":      "../../index.html",
+    "icon":      "../../images/icon.png",
+    "miniicon":  "../../images/miniicon.png"
+}
