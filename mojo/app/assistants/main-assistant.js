@@ -47,22 +47,19 @@ MainAssistant.prototype.setup = function() {
     this.controller.setupWidget("buttonUpdate", this.buttonAttributes, this.buttonModel);
     this.updateHandler = this.update.bind(this);
 
-    // possibility to show command menu on request (tap)
-    //Mojo.Event.listen(this.controller.get('essenListe'), Mojo.Event.tap, this.listtap.bind(this));
-    
-	// create menu    
+    // app menu
     this.appMenuAttr = {omitDefaultItems: true};
-	this.appMenuModel = {
-            visible: true,
-            items: [
-                { label: $L('Update'), command: 'do-update' },
-                { label: $L('Clear DB'), command: 'do-clear-db' },
-                { label: $L("Preferences..."), command: 'do-prefs' },
-                { label: $L('About...'), command: 'do-about' }
-            ]
-        };
-	this.controller.setupWidget(Mojo.Menu.appMenu, this.appMenuAttr, this.appMenuModel);
-    
+    this.appMenuModel = {
+        visible: true,
+        items: [
+            { label: $L('Update'), command: 'do-update' },
+            { label: $L('Clear DB'), command: 'do-clear-db' },
+            { label: $L("Preferences"), command: 'do-prefs' },
+            { label: $L('About'), command: 'do-about' }
+        ]
+    };
+    this.controller.setupWidget(Mojo.Menu.appMenu, this.appMenuAttr, this.appMenuModel);
+
     // command menu
     this.commandMenuModel = {
             items:	[{icon: 'back', command:'cmd-1', disabled: false},
@@ -529,24 +526,6 @@ MainAssistant.prototype.handleCommand = function(event) {
             Mojo.Controller.stageController.pushScene('preferences', this);
             break;
 
-        case 'do-about':
-            this.controller.showAlertDialog({
-                onChoose: function(value) {},
-                title: $L(Mojo.Controller.appInfo.title) + " "
-                    + Mojo.Controller.appInfo.version,
-                message: $L("Copyright 2011 code-devils.de and") + " "
-                    + Mojo.Controller.appInfo.vendor
-                    + ".<br><a href='" + Mojo.Controller.appInfo.vendorurl + "'>"
-                    + Mojo.Controller.appInfo.vendorurl + "</a>",
-                allowHTMLMessage: true,
-                choices:[
-                    {label:$L("OK"), value:""}
-                ]
-            });
-            break;
-
-	    //TODO: fast switch of days leads to incorrect display
-	    //disable buttons before displayEntry(); in updateCommandMenu, they are enabled later
 	case 'cmd-1':
 	    this.displayNewDate(-1);
             break;
@@ -558,8 +537,8 @@ MainAssistant.prototype.handleCommand = function(event) {
 	default:
 	    break;
 
-	} //switch
-    } //if
+	}
+    }
 }
 
 MainAssistant.prototype.updateCommandMenu = function() {
