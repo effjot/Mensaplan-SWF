@@ -17,6 +17,9 @@ function StageAssistant() {
 /* Push main scene */
 
 StageAssistant.prototype.setup = function() {
+    // allows free orientation of application
+    this.controller.setWindowOrientation("free");
+
     this.controller.pushScene('main');
 }
 
@@ -26,7 +29,7 @@ StageAssistant.prototype.setup = function() {
 StageAssistant.prototype.handleCommand = function(event) {
     this.controller = Mojo.Controller.stageController.activeScene();
     if (event.type == Mojo.Event.command) {
-        switch(event.command) {
+        switch (event.command) {
         case 'do-about':
             this.controller.showAlertDialog({
                 onChoose: function(value) {},
