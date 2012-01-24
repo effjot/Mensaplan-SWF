@@ -14,11 +14,11 @@ function WelcomeAssistant(atStartup) {
 
     // on first start, this message is displayed, along with the current version message from below
     this.welcomeMessages = [
-        $L("Display student dining hall (Mensa) menus for various universities in Brandenburg, Germany which are operated by the Studentenwerk Frankfurt/Oder: Cottbus (BTU and HL), Senftenberg, Eberswalde, Frankfurt.  Includes a filtering option: you can hide meals using arbitrary keywords."),
+        $L("This app displays student dining hall (Mensa) menus for various universities in Brandenburg, Germany which are operated by the Studentenwerk Frankfurt/Oder: Cottbus (BTU and HL), Senftenberg, Eberswalde, Frankfurt.  Includes a filtering option – you can hide meals using arbitrary keywords.  Menus for the current and next week are stored on your device, so you don't need internet connection after updating the database."),
         "<strong>" + $L("Scroll down to see what's new in this version.") + "</strong>",
         "<em>" + $L("Dear user,") + "<br>",
         $L("I would like to publish a “finished” 1.0 version of this app soon.  Please have a look at it and send bug reports or other suggestions. I would be very happy to hear from you on the development forum – just follow the link in the “About” app menu entry.") + "</em>",
-        "<em>" + $L("This app builds upon the “MensaPlan BTU” app by")
+        "<em>" + $L("This app builds upon the “MensaPlan BTU” app by ")
             + "<a href='http://code-devils.de'>code-devils.de</a>"
             + $L(", which had no longer been maintained and didn't work any more.  I didn't manage to get into contact with the author by various means and for a long time, so I finally decided to fork his code (GPLv2) and to publish my extensions.") + "</em>",
         "<em>" + $L("Thanks, and enjoy this app!") + "<br>Florian Jenn</em>"
@@ -26,7 +26,8 @@ function WelcomeAssistant(atStartup) {
 
     // change log
     this.changeLog = [
-	{ version: "0.9.0", log: [ "Welcome message and changelog at first startup (code from Preware app – thanks!).",
+	{ version: "0.9.0", log: [ "Pre3 support",
+                                   "Welcome message and changelog at first startup (code from Preware app – thanks!) and from About info.",
                                    "Aiming for a stable 1.0 release." ] },
 	{ version: "0.6.1", log: [ "Translation for new “organic food” category." ] },
 	{ version: "0.6.0", log: [ "Published on Homebrew and App Catalog.",
@@ -59,8 +60,6 @@ function WelcomeAssistant(atStartup) {
 	    {}
 	]
     };
-
-    this.cookie = new Mojo.Model.Cookie("PapersizesPrefs");
 }
 
 WelcomeAssistant.prototype.setup = function() {
@@ -101,10 +100,10 @@ WelcomeAssistant.prototype.setup = function() {
 
     /* setup widgets here */
 
-    this.controller.setupWidget(Mojo.Menu.appMenu, Papersizes.appMenuAttr,
-                                Papersizes.appMenuModelRestricted);
+//    this.controller.setupWidget(Mojo.Menu.appMenu, Papersizes.appMenuAttr,
+  //                              Papersizes.appMenuModelRestricted);
 
-    this.titleContainer.innerHTML = $L("Welcome to <em>Paper Sizes</em>");
+    this.titleContainer.innerHTML = $L("Welcome to <em>Mensa Menu SWF</em>");
     this.messageContainer.innerHTML = messagehtml;
     this.changelogContainer.innerHTML = clhtml;
 
@@ -144,8 +143,8 @@ WelcomeAssistant.prototype.handleCommand = function(event) {
     if (event.type == Mojo.Event.command) {
 	switch (event.command) {
 	case 'do-continue':
-            Papersizes.prefs.showwelcome = false;
-            this.cookie.put(Papersizes.prefs);
+            Mensaplan.prefs.showwelcome = false;
+            Mensaplan.storePrefs();
             if (this.atStartup)
 	        this.controller.stageController.swapScene("main");
             else
