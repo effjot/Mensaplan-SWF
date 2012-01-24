@@ -2,14 +2,15 @@ Mensaplan Studentenwerk Frankfurt (SWF)
 =======================================
 
 Anzeigen der Mensapläne der Mensen des Studentenwerks Frankfurt/Oder:
-Cottbus (BTU und HL), Senftenberg, Eberswalde, Frankfurt.
-Filterfunktion: Gerichte mit frei wählbaren Schlüsselwörtern kÃ¶nnen
-ausgeblendet werden.
+Cottbus (BTU und HL), Senftenberg, Eberswalde, Frankfurt.  Verfügt
+über eine Filterfunktion: Gerichte mit frei wählbaren Schlüsselwörtern
+kÃ¶nnen ausgeblendet werden.
 
 Display student dining hall (Mensa) menus for various universities in
 Brandenburg, Germany which are operated by the Studentenwerk
 Frankfurt/Oder: Cottbus (BTU and HL), Senftenberg, Eberswalde,
-Frankfurt.  Filter: you can hide meals using arbitrary keywords.
+Frankfurt.  Includes a filtering option: you can hide meals using
+arbitrary keywords.
 
 Verfügbar auf Deutsch und Englisch.  (Allerdings ist nur das Programm
 an sich auf Englisch übersetzt; der Mensaplan wird vom Studentenwerk
@@ -30,8 +31,8 @@ Erweitertungen selbst zu veröffentlichen.
 This app builds upon the “MensaPlan BTU” app by code-devils.de, which
 had no longer been maintained and didn't work after changes to the
 Studentenwerk website.  I didn't manage to get into contact with the
-author by various means and long time, so I finally decided to fork
-his code (GPLv2) and to publish my extensions.
+author by various means and for a long time, so I finally decided to
+fork his code (GPLv2) and to publish my extensions.
 
 Der originale Quellcode von Mensaplan BTU liegt auf Google Code:
 http://code.google.com/p/mensaplanbtu/.  Mein Quellcode findet sich
