@@ -17,8 +17,8 @@ function MainAssistant() {
 MainAssistant.prototype.setup = function() {
 
     // create db
-    var dboptions = { name: "dbmensaplanswf", replace: false };
-    this.depot = new Mojo.Depot(dboptions, this.dbConnectionSuccess, this.dbConnectionFailure);
+    //var dboptions = { name: "dbmensaplanswf", replace: false };
+    //this.depot = new Mojo.Depot(dboptions, this.dbConnectionSuccess, this.dbConnectionFailure);
 
     // title
     this.controller.get('essenDatum').innerText = this.noDataString;
@@ -50,11 +50,11 @@ MainAssistant.prototype.setup = function() {
     this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
 
     // read preferences
-    this.depot.simpleGet("mensa", this.getPrefMensa.bind(this), function() {});
-    this.depot.simpleGet("showImages", this.getPrefShowImagesOK.bind(this), function() {});
-    this.depot.simpleGet("filterFood", this.getPrefFilterFoodOK.bind(this), function() {});
-    this.depot.simpleGet("filterWords", this.getPrefFilterWordsOK.bind(this), function() {});
-    this.depot.simpleGet("wholeWords", this.getPrefWholeWordsOK.bind(this), function() {});
+    Mensaplan.depot.simpleGet("mensa", this.getPrefMensa.bind(this), function() {});
+    Mensaplan.depot.simpleGet("showImages", this.getPrefShowImagesOK.bind(this), function() {});
+    Mensaplan.depot.simpleGet("filterFood", this.getPrefFilterFoodOK.bind(this), function() {});
+    Mensaplan.depot.simpleGet("filterWords", this.getPrefFilterWordsOK.bind(this), function() {});
+    Mensaplan.depot.simpleGet("wholeWords", this.getPrefWholeWordsOK.bind(this), function() {});
 
     // spinner
     this.spinner = this.controller.get('spin-scrim');
@@ -73,7 +73,7 @@ MainAssistant.prototype.setup = function() {
 
 
 MainAssistant.prototype.activate = function() {
-    this.depot.get("keys", this.dbGetKeysSuccess.bind(this), this.dbGetKeysFailure.bind(this));
+    Mensaplan.depot.get("keys", this.dbGetKeysSuccess.bind(this), this.dbGetKeysFailure.bind(this));
     this.updateCommandMenu();
     //this.setButtonStatus(false);
     Mojo.Event.listen(this.controller.get('buttonUpdate'),
@@ -167,7 +167,7 @@ MainAssistant.prototype.hasInternet = function() {
     this.setButtonStatus(true);
 
     // clean db
-    this.depot.removeAll(this.dbRemoveAllSuccess.bind(this),
+    Mensaplan.depot.removeAll(this.dbRemoveAllSuccess.bind(this),
                          this.dbConnectionFailure.bind(this));
 
     if (window.XMLHttpRequest) {
@@ -278,7 +278,7 @@ MainAssistant.prototype.sendRequest = function(url, firstRun) {
                         }
 
                         // add meals for a specified day to db
-			myapp.depot.add(numericdate, essenArray);
+			Mensaplan.depot.add(numericdate, essenArray);
 
                         // add date to keys
 			myapp.keyArray.push(numericdate);
@@ -301,10 +301,10 @@ MainAssistant.prototype.sendRequest = function(url, firstRun) {
 		    myapp.controller.window.clearTimeout(myapp.timer);
 
 		    // add to db
-		    myapp.depot.add("keys", myapp.keyArray);
+		    Mensaplan.depot.add("keys", myapp.keyArray);
 
 		    // refresh view
-		    myapp.depot.get("keys", myapp.dbGetKeysSuccess.bind(myapp),
+		    Mensaplan.depot.get("keys", myapp.dbGetKeysSuccess.bind(myapp),
                                     myapp.dbGetKeysFailure.bind(myapp));
 		}
             }
@@ -369,7 +369,7 @@ MainAssistant.prototype.displayEntry = function() {
     this.controller.get('essenListe').innerHTML = "";
     this.controller.get('essenDatum').innerText = daylist[weekday] + ", " + currentDay;
 
-    this.depot.get(this.days[this.current], this.dbDisplayEntry.bind(this),
+    Mensaplan.depot.get(this.days[this.current], this.dbDisplayEntry.bind(this),
                    function(error) {
                        Mojo.Controller.errorDialog("Can't get values (#" + error.message + ").");
                    });
@@ -564,7 +564,7 @@ MainAssistant.prototype.getElementsByTagAndClass = function(element, tag, class)
 
 
 MainAssistant.prototype.clearDB = function() {
-    this.depot.removeAll(this.dbRemoveAllSuccess, this.dbConnectionFailure);
+    Mensaplan.depot.removeAll(this.dbRemoveAllSuccess, this.dbConnectionFailure);
     this.controller.get("essenListe").innerHTML = "";
     this.controller.get("essenDatum").innerText = this.noDataString;
     this.current = -1;
@@ -636,4 +636,3 @@ MainAssistant.prototype.flickNextPrev = function(event) {
         this.displayNewDate(-1);
     }
 };
-
