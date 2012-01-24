@@ -2,7 +2,7 @@
    http://git.webos-internals.org/applications/preware/
    GPL v2 license */
 
-function WelcomeAssistant(windowOrientation, atStartup) {
+function WelcomeAssistant(atStartup) {
     /* this is the creator function for your scene assistant
        object. It will be passed all the additional parameters (after
        the scene name) that were passed to pushScene. The reference to
@@ -10,7 +10,6 @@ function WelcomeAssistant(windowOrientation, atStartup) {
        yet, so any initialization that needs the scene controller
        should be done in the setup function below. */
 
-    this.windowOrientation = windowOrientation;
     this.atStartup = atStartup;
 
     // on first start, this message is displayed, along with the current version message from below
@@ -148,7 +147,7 @@ WelcomeAssistant.prototype.handleCommand = function(event) {
             Papersizes.prefs.showwelcome = false;
             this.cookie.put(Papersizes.prefs);
             if (this.atStartup)
-	        this.controller.stageController.swapScene("main", this.windowOrientation);
+	        this.controller.stageController.swapScene("main");
             else
                 this.controller.stageController.popScene();
 	    break;
