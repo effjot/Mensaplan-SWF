@@ -27,24 +27,23 @@ function WelcomeAssistant(windowOrientation, atStartup) {
 
     // change log
     this.changeLog = [
-	{ version: "0.9.7", log: [ "Cleaned up North American envelope sizes.",
-                                   "Added 2A0 and 4A0 ISO formats." ] },
-	{ version: "0.9.6", log: [ "Envelope sizes (DIN/ISO and North American).",
-                                   "There will be no new features before the 1.0 release.  Please submit bug reports, and see the development forum for the post-1.0 roadmap." ] },
-	{ version: "0.9.5", log: [ "Pre3 support.",
-                                   "App should be almost complete now – I'm waiting for your suggestions and bug reports." ] },
-	{ version: "0.9.4", log: [ "Two new size series: ANSI and Arch formats.", "Short explanations in preferences." ] },
-	{ version: "0.9.3", log: [ "New unit: points.",  "A few more American sizes." ] },
-	{ version: "0.9.2", log: [ "New icon.", "Minor user interface changes." ] },
-	{ version: "0.9.1", log: [ "New “unit”: aspect ratio – select display style (ratio 1:x or fraction x:y) in the preferences.  A few more photo sizes have been added and some wrong photo sizes fixed." ] },
-	{ version: "0.9.0", log: [ "New size series: photo print sizes. Thanks to “Bag of Leaves” for the suggestion!",
-                                   "Welcome message and changelog at first startup (code from Preware app – thanks!)." ] },
-	{ version: "0.5.1", log: [ "Unit at startup can be selected in preferences." ] },
-	{ version: "0.5.0", log: [ "Size series at startup can be selected in preferences." ] },
-	{ version: "0.4.3", log: [ "DPI (for pixel sizes) can be selected in preferences." ] },
-	{ version: "0.4.2", log: [ "Support and development URLs in “About” message." ] },
-	{ version: "0.4.1", log: [ "Proper localisation of units." ] },
-	{ version: "0.4.0", log: [ "Different units can be selected: mm, inch, pixel." ] }
+	{ version: "0.9.0", log: [ "Welcome message and changelog at first startup (code from Preware app – thanks!).",
+                                   "Aiming for a stable 1.0 release." ] },
+	{ version: "0.6.1", log: [ "Translation for new “organic food” category." ] },
+	{ version: "0.6.0", log: [ "Published on Homebrew and App Catalog.",
+                                   "Removed Studentenwerk logo from icon because I didn't get any reply to my request if I may use it." ] },
+	{ version: "0.5.5", log: [ "“Today” button." ] },
+	{ version: "0.5.4", log: [ "Meal categories translated to English." ] },
+	{ version: "0.5.2", log: [ "New icon." ] },
+	{ version: "0.5.1", log: [ "Support for remaining mensas: Frankfurt, Senftenberg, Eberswalde." ] },
+	{ version: "0.5.0", log: [ "Offers both mensas in Cottbus (BTU and HL).",
+                                   "Renamed to “Mensa Menu Studentenwerk Frankfurt”, new app ID.",
+                                   "Code cleanup." ] },
+	{ version: "0.4.4", log: [ "Code more flexible: is able to get menus of different mensas (besides BTU Cottbus)." ] },
+	{ version: "0.4.2", log: [ "Flick left/right to change days.", "Code cleanup." ] },
+	{ version: "0.4.1", log: [ "Adapted parser to new Studentenwerk website." ] },
+	{ version: "0.3.3", log: [ "Internationalisation and German localisation." ] },
+	{ version: "0.3.2", log: [ "Last published version of “MensaPlan BTU” by code-devils.de." ] }
     ];
 
     this.continueButtonDelay = 1.5;
@@ -149,7 +148,7 @@ WelcomeAssistant.prototype.handleCommand = function(event) {
             Papersizes.prefs.showwelcome = false;
             this.cookie.put(Papersizes.prefs);
             if (this.atStartup)
-	        this.controller.stageController.swapScene("sizes-list", this.windowOrientation);
+	        this.controller.stageController.swapScene("main", this.windowOrientation);
             else
                 this.controller.stageController.popScene();
 	    break;
