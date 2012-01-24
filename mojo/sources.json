@@ -8,4 +8,8 @@
         "scenes": "preferences",
         "source": "app/assistants/preferences-assistant.js"
     }
+    {
+        "scenes": "welcome",
+        "source": "app/assistants/welcome-assistant.js"
+    }
 ]
