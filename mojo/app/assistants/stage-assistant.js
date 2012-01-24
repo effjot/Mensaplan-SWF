@@ -1,3 +1,22 @@
+/* Global variable holding data and preferences */
+
+Mensaplan = {};
+Mensaplan.prefs = {
+    showwelcome: true
+}
+
+Mensaplan.storePrefs = function() {
+    Mojo.Log.info("Storing prefs to DB.");
+    Mensaplan.depot.add("prefs", Mensaplan.prefs,
+		        function() {
+                            Mojo.Log.info("Prefs stored successfully.");
+                        },
+		        function(event) {
+			    Mojo.Log.info("Prefs DB failure: %j", event);
+	                });
+}
+
+
 function StageAssistant() {
     /* this is the creator function for your stage assistant object */
 
@@ -23,13 +42,17 @@ function StageAssistant() {
 /* Push main scene */
 
 StageAssistant.prototype.setup = function() {
+    /* this function is for setup tasks that have to happen when the
+       stage is first created */
+
     // allows free orientation of application
+
     this.controller.setWindowOrientation("free");
 
-    if (true) //(Papersizes.prefs.showwelcome)
-        this.controller.pushScene("welcome", true);
-    else
-        this.controller.pushScene("main");
+    // get preferences, then push first scene (in callback)
+    var dboptions = { name: "dbmensaplanswf", replace: false };
+    Mensaplan.depot = new Mojo.Depot(dboptions, this.dbConnectionSuccess.bind(this),
+                                     this.dbFailure.bind(this));
 }
 
 
@@ -77,3 +100,31 @@ StageAssistant.prototype.handleCommand = function(event) {
         }
     }
 };
+
+
+StageAssistant.prototype.dbConnectionSuccess = function() {
+    Mojo.Log.info("DB successfully connected.");
+    Mensaplan.depot.get("prefs", this.getPrefs.bind(this),
+ this.dbFailure.bind(this));
+};
+
+StageAssistant.prototype.dbFailure = function(event) {
+    Mojo.Controller.errorDialog("Database failure: %j.", event);
+};
+
+StageAssistant.prototype.getPrefs = function(args) {
+    if (args) {
+	for (value in args) {
+	    Mensaplan.prefs[value] = args[value];
+	    Mojo.Log.info("Pref: ", value, args[value], Mensaplan.prefs[value]);
+	}
+    }
+    Mojo.Log.info("Prefs: %j", Mensaplan.prefs);
+
+    // Prefs are loaded, now we can push the first scene
+    if (Mensaplan.prefs.showwelcome)
+        this.controller.pushScene("welcome", true);
+    else
+        this.controller.pushScene("main");
+};
+
