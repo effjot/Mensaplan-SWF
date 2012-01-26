@@ -1,25 +1,3 @@
-/* Global variable holding data and preferences */
-
-Mensaplan = {};
-Mensaplan.prefs = {             // Preferences
-    mensa:       "CottbusBTU",  // Mensa to display
-    showImages:  true,          // Show images for ingredients?
-    filterFood:  false,         // Hide meals matching keywords?
-    filterWords: new Array(),
-    wholeWords:  true,          // Match only full words in filter?
-    showWelcome: true           // Show welcome message and changelog? (At first start)
-}
-
-Mensaplan.storePrefs = function() {
-    Mojo.Log.info("Storing prefs to DB.");
-    Mensaplan.depot.add("prefs", Mensaplan.prefs,
-		        function() {
-                            Mojo.Log.info("Prefs stored successfully.");
-                        },
-		        function(event) {
-			    Mojo.Log.info("Prefs DB failure: %j", event);
-	                });
-}
 
 
 function StageAssistant() {
@@ -41,6 +19,51 @@ function StageAssistant() {
         + "<a href='http://forums.webosnation.com/webos-homebrew-apps/295179-mensaplan-studentenwerk-frankfurt-swf.html'>"
         + $L("webOS Nation forum")
         + "</a>.</div>";
+
+    /* Global variable holding data, preferences and utility functions */
+
+    Mensaplan = {};
+
+    // Preferences
+
+    Mensaplan.prefs = {
+        mensa:       "CottbusBTU",  // Mensa to display
+        showImages:  true,          // Show images for ingredients?
+        filterFood:  false,         // Hide meals matching keywords?
+        filterWords: new Array(),
+        wholeWords:  true,          // Match only full words in filter?
+        showWelcome: true           // Show welcome message and changelog? (At first start)
+    }
+
+    Mensaplan.storePrefs = function() {
+        Mojo.Log.info("Storing prefs to DB.");
+        Mensaplan.depot.add("prefs", Mensaplan.prefs,
+		            function() {
+                                Mojo.Log.info("Prefs stored successfully.");
+                            },
+		            function(event) {
+			        Mojo.Log.info("Prefs DB failure: %j", event);
+	                    });
+    }
+
+    // app menu
+
+    Mensaplan.appMenuAttr = { omitDefaultItems: true };
+
+    Mensaplan.appMenuModel = {
+        items: [
+            { label: $L("Update"), command: "do-update", disabled: true },
+            { label: $L("Clear Database"), command: "do-clear-db", disabled: false },
+            { label: $L("Preferences"), command: "do-prefs", disabled: false },
+            { label: $L("About"), command: "do-about", disabled: false }
+        ]
+    };
+    Mensaplan.appMenuModelRestricted = {
+        items: [
+            { label: $L("About"), command: "do-about-restricted" }
+        ]
+    };
+
 }
 
 
