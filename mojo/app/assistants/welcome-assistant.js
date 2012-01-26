@@ -14,7 +14,7 @@ function WelcomeAssistant(atStartup) {
 
     // on first start, this message is displayed, along with the current version message from below
     this.welcomeMessages = [
-        $L("This app displays student dining hall (Mensa) menus for various universities in Brandenburg, Germany which are operated by the Studentenwerk Frankfurt/Oder: Cottbus (BTU and HL), Senftenberg, Eberswalde, Frankfurt.  Includes a filtering option – you can hide meals using arbitrary keywords.  Menus for the current and next week are stored on your device, so you don't need internet connection after updating the database."),
+        $L("This app displays student dining hall (Mensa) menus for various universities in Brandenburg, Germany which are operated by the Studentenwerk Frankfurt/Oder: Cottbus (BTU and HL), Senftenberg, Eberswalde, Frankfurt.  Includes a filtering option – you can hide meals using arbitrary keywords.  Menus for the current and next week are stored on your device, so you don't need internet connection after updating the database.  Flick left/right or use the arrows to change the date."),
         "<strong>" + $L("Scroll down to see what's new in this version.") + "</strong>",
         "<em>" + $L("Dear user,") + "<br>",
         $L("I would like to publish a “finished” 1.0 version of this app soon.  Please have a look at it and send bug reports or other suggestions. I would be very happy to hear from you on the development forum – just follow the link in the “About” app menu entry.") + "</em>",
@@ -28,7 +28,8 @@ function WelcomeAssistant(atStartup) {
     this.changeLog = [
 	{ version: "0.9.0", log: [ "Pre3 support",
                                    "Welcome message and changelog at first startup (code from Preware app – thanks!) and from About info.",
-                                   "Aiming for a stable 1.0 release." ] },
+                                   "Aiming for a stable 1.0 release.",
+                                   "Code cleanup." ] },
 	{ version: "0.6.1", log: [ "Translation for new “organic food” category." ] },
 	{ version: "0.6.0", log: [ "Published on Homebrew and App Catalog.",
                                    "Removed Studentenwerk logo from icon because I didn't get any reply to my request if I may use it." ] },
@@ -100,8 +101,8 @@ WelcomeAssistant.prototype.setup = function() {
 
     /* setup widgets here */
 
-//    this.controller.setupWidget(Mojo.Menu.appMenu, Papersizes.appMenuAttr,
-  //                              Papersizes.appMenuModelRestricted);
+    this.controller.setupWidget(Mojo.Menu.appMenu, Mensaplan.appMenuAttr,
+                                Mensaplan.appMenuModelRestricted);
 
     this.titleContainer.innerHTML = $L("Welcome to <em>Mensa Menu SWF</em>");
     this.messageContainer.innerHTML = messagehtml;
