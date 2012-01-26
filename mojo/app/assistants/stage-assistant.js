@@ -1,8 +1,13 @@
 /* Global variable holding data and preferences */
 
 Mensaplan = {};
-Mensaplan.prefs = {
-    showwelcome: true
+Mensaplan.prefs = {             // Preferences
+    mensa:       "CottbusBTU",  // Mensa to display
+    showImages:  true,          // Show images for ingredients?
+    filterFood:  false,         // Hide meals matching keywords?
+    filterWords: new Array(),
+    wholeWords:  true,          // Match only full words in filter?
+    showWelcome: true           // Show welcome message and changelog? (At first start)
 }
 
 Mensaplan.storePrefs = function() {
@@ -56,6 +61,36 @@ StageAssistant.prototype.setup = function() {
 }
 
 
+/* Setup of Mojo.Depot database */
+
+StageAssistant.prototype.dbConnectionSuccess = function() {
+    Mojo.Log.info("DB successfully connected.");
+    Mensaplan.depot.get("prefs", this.getPrefs.bind(this),
+ this.dbFailure.bind(this));
+};
+
+StageAssistant.prototype.dbFailure = function(event) {
+    Mojo.Controller.errorDialog("Database failure: %j.", event);
+};
+
+StageAssistant.prototype.getPrefs = function(args) {
+    if (args) {
+	for (value in args) {
+	    Mensaplan.prefs[value] = args[value];
+	    Mojo.Log.info("Pref: ", value, args[value], Mensaplan.prefs[value]);
+	}
+    }
+    Mojo.Log.info("Prefs: %j", Mensaplan.prefs);
+
+    // Prefs are loaded, now we can push the first scene
+    if (Mensaplan.prefs.showWelcome)
+        this.controller.pushScene("welcome", true);
+    else
+        this.controller.pushScene("main");
+};
+
+
+
 /* Handle "About" menu */
 
 StageAssistant.prototype.handleCommand = function(event) {
@@ -100,31 +135,3 @@ StageAssistant.prototype.handleCommand = function(event) {
         }
     }
 };
-
-
-StageAssistant.prototype.dbConnectionSuccess = function() {
-    Mojo.Log.info("DB successfully connected.");
-    Mensaplan.depot.get("prefs", this.getPrefs.bind(this),
- this.dbFailure.bind(this));
-};
-
-StageAssistant.prototype.dbFailure = function(event) {
-    Mojo.Controller.errorDialog("Database failure: %j.", event);
-};
-
-StageAssistant.prototype.getPrefs = function(args) {
-    if (args) {
-	for (value in args) {
-	    Mensaplan.prefs[value] = args[value];
-	    Mojo.Log.info("Pref: ", value, args[value], Mensaplan.prefs[value]);
-	}
-    }
-    Mojo.Log.info("Prefs: %j", Mensaplan.prefs);
-
-    // Prefs are loaded, now we can push the first scene
-    if (Mensaplan.prefs.showwelcome)
-        this.controller.pushScene("welcome", true);
-    else
-        this.controller.pushScene("main");
-};
-
