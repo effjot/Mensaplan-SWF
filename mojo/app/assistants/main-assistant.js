@@ -22,16 +22,8 @@ MainAssistant.prototype.setup = function() {
     this.updateHandler = this.update.bindAsEventListener(this);
 
     // app menu
-    this.appMenuAttr = { omitDefaultItems: true };
-    this.appMenuModel = {
-        items: [
-            { label: $L('Update'), command: 'do-update', disabled: true },
-            { label: $L('Clear Database'), command: 'do-clear-db', disabled: false },
-            { label: $L("Preferences"), command: 'do-prefs', disabled: false },
-            { label: $L('About'), command: 'do-about', disabled: false }
-        ]
-    };
-    this.controller.setupWidget(Mojo.Menu.appMenu, this.appMenuAttr, this.appMenuModel);
+    this.controller.setupWidget(Mojo.Menu.appMenu, Mensaplan.appMenuAttr,
+                                Mensaplan.appMenuModel);
 
     // command menu
     this.commandMenuModel = {
@@ -462,9 +454,9 @@ MainAssistant.prototype.setButtonStatus = function(status) {
 
     // menu
     Mojo.Log.info("setButtonStatus(): menu; ignore spurious warning logged below!");
-    this.appMenuModel.items[0].disabled = status;
-    this.appMenuModel.items[1].disabled = status;
-    this.controller.modelChanged(this.appMenuModel, this);
+    Mensaplan.appMenuModel.items[0].disabled = status;
+    Mensaplan.appMenuModel.items[1].disabled = status;
+    this.controller.modelChanged(Mensaplan.appMenuModel, this);
 
     // spinner
     Mojo.Log.info("setButtonStatus(): spinner");
