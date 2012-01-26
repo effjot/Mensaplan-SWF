@@ -1,3 +1,5 @@
+// TODO: only clearDB() when mensa really changed (selecting new, then old will result in clearDB)
+
 var mainScene;
 
 function PreferencesAssistant(mainScene) {
@@ -14,7 +16,7 @@ function PreferencesAssistant(mainScene) {
         ]
     };
     this.selectorMensaModel = {
-        value: this.mainScene.mensa
+        value: Mensaplan.prefs.mensa
     };
 }
 
@@ -26,7 +28,7 @@ PreferencesAssistant.prototype.setup = function() {
     this.appMenuModel = {
         visible: true,
         items: [
-            { label: $L('About'), command: 'do-about' }
+            { label: $L('About'), command: 'do-about-restricted' }
         ]
     };
     this.controller.setupWidget(Mojo.Menu.appMenu, this.appMenuAttr, this.appMenuModel);
@@ -45,7 +47,7 @@ PreferencesAssistant.prototype.setup = function() {
 	    falseLabel: $L('Hide')
 	};
 	this.togglemodelShowImages = {
-        value: this.mainScene.showImages
+        value: Mensaplan.prefs.showImages
 	};
 	this.controller.setupWidget("togglebuttonImg", this.toggleattsShowImages, this.togglemodelShowImages);
     Mojo.Event.listen(this.controller.get('togglebuttonImg'), Mojo.Event.propertyChange, this.togglechangeShowImages.bindAsEventListener(this));
@@ -56,7 +58,7 @@ PreferencesAssistant.prototype.setup = function() {
 	    falseLabel: $L('No')
 	};
 	this.togglemodelFilterFood = {
-        value: this.mainScene.filterFood
+        value: Mensaplan.prefs.filterFood
 	};
 	this.controller.setupWidget("togglebuttonFilter", this.toggleattsFilterFood, this.togglemodelFilterFood);
     Mojo.Event.listen(this.controller.get('togglebuttonFilter'), Mojo.Event.propertyChange, this.togglechangeFilterFood.bindAsEventListener(this));
@@ -67,7 +69,7 @@ PreferencesAssistant.prototype.setup = function() {
 	    falseLabel: $L('No')
 	};
 	this.togglemodelWholeWords = {
-        value: this.mainScene.wholeWords
+        value: Mensaplan.prefs.wholeWords
 	};
 	this.controller.setupWidget("togglebuttonWhole", this.toggleattsWholeWords, this.togglemodelWholeWords);
     Mojo.Event.listen(this.controller.get('togglebuttonWhole'), Mojo.Event.propertyChange, this.togglechangeWholeWords.bindAsEventListener(this));
@@ -86,7 +88,7 @@ PreferencesAssistant.prototype.setup = function() {
 	
 	// Set up a few models so we can test setting the widget model
 	//this.wordsModel = {listTitle:$L('Words'), items: this.mainScene.filterWords};
-	this.wordsModel = {listTitle:$L('Words'), items: this.mainScene.filterWords};
+	this.wordsModel = {listTitle:$L('Words'), items: Mensaplan.prefs.filterWords};
 	
 	// Set up the attributes & model for the List widget
 	this.controller.setupWidget('wordsList', 
@@ -106,25 +108,25 @@ PreferencesAssistant.prototype.setup = function() {
 
 
 PreferencesAssistant.prototype.handleMensaChange = function(event) {
-    this.mainScene.depot.simpleAdd("mensa", this.selectorMensaModel.value);
-    this.mainScene.mensa = this.selectorMensaModel.value;
+    Mensaplan.prefs.mensa = this.selectorMensaModel.value;
+    Mensaplan.storePrefs();
     this.mainScene.clearDB();
-    Mojo.Log.info("Mensa change:", this.mainScene.mensa);
+    Mojo.Log.info("Mensa change:", Mensaplan.prefs.mensa);
 };
 
 PreferencesAssistant.prototype.togglechangeShowImages = function(event) {
-    this.mainScene.depot.simpleAdd("showImages", this.togglemodelShowImages.value);
-	this.mainScene.showImages = this.togglemodelShowImages.value;
+    Mensaplan.prefs.showImages = this.togglemodelShowImages.value;
+    Mensaplan.storePrefs();
 };
 
 PreferencesAssistant.prototype.togglechangeFilterFood = function(event) {
-    this.mainScene.depot.simpleAdd("filterFood", this.togglemodelFilterFood.value);
-	this.mainScene.filterFood = this.togglemodelFilterFood.value;
+    Mensaplan.prefs.filterFood = this.togglemodelFilterFood.value;
+    Mensaplan.storePrefs();
 };
 
 PreferencesAssistant.prototype.togglechangeWholeWords = function(event) {
-    this.mainScene.depot.simpleAdd("wholeWords", this.togglemodelWholeWords.value);
-	this.mainScene.wholeWords = this.togglemodelWholeWords.value;
+    Mensaplan.prefs.wholeWords = this.togglemodelWholeWords.value;
+    Mensaplan.storePrefs();
 };
 
 PreferencesAssistant.prototype.activate = function(event) {
@@ -134,6 +136,7 @@ PreferencesAssistant.prototype.deactivate = function(event) {
 }
 
 PreferencesAssistant.prototype.cleanup = function(event) {
+//FIXME: shouldn't these be in deactivate()?
 	Mojo.Event.stopListening(this.controller.get('togglebuttonImg'), Mojo.Event.propertyChange, this.togglechangeShowImages)	
 	Mojo.Event.stopListening(this.controller.get('togglebuttonFilter'), Mojo.Event.propertyChange, this.togglechangeFilterFood)
 	Mojo.Event.stopListening(this.controller.get('togglebuttonWhole'), Mojo.Event.propertyChange, this.togglechangeFilterFood)
@@ -157,7 +160,6 @@ PreferencesAssistant.prototype.listAddHandler = function(event) {
 
 PreferencesAssistant.prototype.listDeleteHandler = function(event) {
     this.wordsModel.items.splice(this.wordsModel.items.indexOf(event.item), 1);
-
     this.processWords();
 }
 
@@ -165,11 +167,11 @@ PreferencesAssistant.prototype.listChangeHandler = function(event) {
     if (event.originalEvent.target.tagName == "INPUT") {
         event.item.data = event.originalEvent.target.value;
     }
-
     this.processWords();
 }
 
 PreferencesAssistant.prototype.processWords = function() {
-	this.mainScene.depot.simpleAdd("filterWords", this.wordsModel.items);
+    Mensaplan.prefs.filterWords = this.wordsModel.items;
+    Mensaplan.storePrefs();
 }
 
