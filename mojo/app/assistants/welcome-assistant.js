@@ -143,7 +143,7 @@ WelcomeAssistant.prototype.handleCommand = function(event) {
     if (event.type == Mojo.Event.command) {
 	switch (event.command) {
 	case 'do-continue':
-            Mensaplan.prefs.showwelcome = false;
+            Mensaplan.prefs.showWelcome = false;
             Mensaplan.storePrefs();
             if (this.atStartup)
 	        this.controller.stageController.swapScene("main");
