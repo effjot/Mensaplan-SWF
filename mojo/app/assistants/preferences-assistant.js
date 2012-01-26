@@ -24,14 +24,8 @@ function PreferencesAssistant(mainScene) {
 
 PreferencesAssistant.prototype.setup = function() {
     // app menu
-    this.appMenuAttr = {omitDefaultItems: true};
-    this.appMenuModel = {
-        visible: true,
-        items: [
-            { label: $L('About'), command: 'do-about-restricted' }
-        ]
-    };
-    this.controller.setupWidget(Mojo.Menu.appMenu, this.appMenuAttr, this.appMenuModel);
+    this.controller.setupWidget(Mojo.Menu.appMenu, Mensaplan.appMenuAttr,
+                                Mensaplan.appMenuModelOnlyAbout);
 
     // initialize preferences
 
