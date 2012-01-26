@@ -51,19 +51,23 @@ function StageAssistant() {
     Mensaplan.appMenuAttr = { omitDefaultItems: true };
 
     Mensaplan.appMenuModel = {
-        items: [
+        items: [                // Attention! Indices 0 and 1 are hardcoded in main-assistant.
             { label: $L("Update"), command: "do-update", disabled: true },
             { label: $L("Clear Database"), command: "do-clear-db", disabled: false },
             { label: $L("Preferences"), command: "do-prefs", disabled: false },
             { label: $L("About"), command: "do-about", disabled: false }
         ]
     };
-    Mensaplan.appMenuModelRestricted = {
+    Mensaplan.appMenuModelOnlyAbout = {
+        items: [
+            { label: $L("About"), command: "do-about" }
+        ]
+    };
+    Mensaplan.appMenuModelRestricted =  {
         items: [
             { label: $L("About"), command: "do-about-restricted" }
         ]
     };
-
 }
 
 
