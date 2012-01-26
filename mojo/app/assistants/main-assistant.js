@@ -4,21 +4,13 @@ function MainAssistant() {
     this.days;
     this.noDataString = $L("No Data – Press Update");
     this.xmlHttp;
-    this.keyArray = new Array();
-    this.mensa = "CottbusBTU";  // Mensa to display
-    this.showImages = true;
-    this.filterFood = false;
-    this.filterWords = new Array();
-    this.wholeWords = true;
+    this.keys = new Array();
+    this.menus = new Array();
     this.timer = null;
 }
 
 
 MainAssistant.prototype.setup = function() {
-
-    // create db
-    //var dboptions = { name: "dbmensaplanswf", replace: false };
-    //this.depot = new Mojo.Depot(dboptions, this.dbConnectionSuccess, this.dbConnectionFailure);
 
     // title
     this.controller.get('essenDatum').innerText = this.noDataString;
@@ -48,13 +40,6 @@ MainAssistant.prototype.setup = function() {
                   { icon: "forward",    command: "go-next",  disabled: true }]
         };
     this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
-
-    // read preferences
-    Mensaplan.depot.simpleGet("mensa", this.getPrefMensa.bind(this), function() {});
-    Mensaplan.depot.simpleGet("showImages", this.getPrefShowImagesOK.bind(this), function() {});
-    Mensaplan.depot.simpleGet("filterFood", this.getPrefFilterFoodOK.bind(this), function() {});
-    Mensaplan.depot.simpleGet("filterWords", this.getPrefFilterWordsOK.bind(this), function() {});
-    Mensaplan.depot.simpleGet("wholeWords", this.getPrefWholeWordsOK.bind(this), function() {});
 
     // spinner
     this.spinner = this.controller.get('spin-scrim');
@@ -95,43 +80,6 @@ MainAssistant.prototype.cleanup = function() {
 }
 
 
-
-/* Preferences */
-
-MainAssistant.prototype.getPrefMensa = function(result) {
-    if (result != null)
-        this.mensa = result;
-    else
-        this.mensa = "CottbusBTU";
-}
-
-MainAssistant.prototype.getPrefShowImagesOK = function(result) {
-    if (result != null)
-        this.showImages = result;
-    else
-	this.showImages = true;
-}
-
-MainAssistant.prototype.getPrefFilterFoodOK = function(result) {
-    if (result != null)
-        this.filterFood = result;
-    else
-	this.filterFood = false;
-}
-
-MainAssistant.prototype.getPrefFilterWordsOK = function(result) {
-    if (result != null)
-        this.filterWords = result;
-}
-
-MainAssistant.prototype.getPrefWholeWordsOK = function(result) {
-    if (result != null)
-        this.wholeWords = result;
-    else
-	this.wholeWords = true;
-}
-
-
 /* Update database (from app menu or button) */
 
 MainAssistant.prototype.update = function(event) {
@@ -141,18 +89,15 @@ MainAssistant.prototype.update = function(event) {
     new Mojo.Service.Request('palm://com.palm.connectionmanager', {
         method: 'getstatus',
         onSuccess: function(data) {
-            if ((data.wan.state == "disconnected") &&
-                    // no internet over bluetooth yet
-                    /*(data.btpan.state == "disconnected") &&*/
-                    (data.wifi.state == "disconnected")) {
-                Mojo.Controller.errorDialog($L("No internet connection available."));
-            } else {
+            if (data.isInternetConnectionAvailable) {
                 myapp.timer = myapp.controller.window.setTimeout(
                     myapp.cancelDownload.bind(myapp), 30000);
-                myapp.hasInternet().bind(myapp);
+                myapp.hasInternet(); // start the update proper
+            } else {
+                Mojo.Controller.errorDialog($L("No internet connection available."));
             }
         },
-        onFailure: function(data) {}
+        onFailure: function() {}
     });
 }
 
@@ -166,22 +111,17 @@ MainAssistant.prototype.hasInternet = function() {
     // disable buttons
     this.setButtonStatus(true);
 
-    // clean db
-    Mensaplan.depot.removeAll(this.dbRemoveAllSuccess.bind(this),
-                         this.dbConnectionFailure.bind(this));
+    // clear old data
+    // FIXME: check for error in sendRequest, keep old menu if download failed
+    this.keys.length = 0;
+    this.menus.length = 0;
 
+    // send request for first page
     if (window.XMLHttpRequest) {
         this.xmlHttp = new XMLHttpRequest();
     }
-
-    // send request for first page
-    this.keyArray = new Array();
-
-    // get current calendar week (ISO 8601)
-    var week = this.getKalenderwoche(0);
-
-    // request current week
-    this.sendRequest(this.getMensaBaseURL(this.mensa) + week, true);
+    var week = this.getKalenderwoche(0); // get current calendar week (ISO 8601)
+    this.sendRequest(this.getMensaBaseURL(Mensaplan.prefs.mensa) + week, true);
 }
 
 MainAssistant.prototype.getKalenderwoche = function(offsetWeek) {
@@ -203,12 +143,13 @@ MainAssistant.prototype.getKalenderwoche = function(offsetWeek) {
 
 MainAssistant.prototype.sendRequest = function(url, firstRun) {
     var myapp = this;
+    Mojo.Log.info("sendRequest(): url =", url, "firstRun =", firstRun);
 
     if (this.xmlHttp) {
 
         this.xmlHttp.open('GET', url, true);
 
-        this.xmlHttp.onreadystatechange = function () {
+        this.xmlHttp.onreadystatechange = function() {
 
             if (myapp.xmlHttp.readyState == 4) {
 
@@ -253,7 +194,7 @@ MainAssistant.prototype.sendRequest = function(url, firstRun) {
                         if (meals.length > 0) {
                             // iterate over meals
                             for (var j = 0; j < meals.length; j++) {
-                                Mojo.Log.info("meals j =", j);
+                                //Mojo.Log.info("meals j =", j);
                                 var meal = meals[j];
                                 var mealcategory = meal.firstChild.nextSibling.nodeValue;
                                 var ind = mealcategory.lastIndexOf(":");
@@ -261,8 +202,8 @@ MainAssistant.prototype.sendRequest = function(url, firstRun) {
                                     mealcategory = mealcategory.slice(0, ind);
                                 }
                                 var mealdesc = meal.childNodes[3].innerText;
-                                Mojo.Log.info("mealcategory =", mealcategory);
-                                Mojo.Log.info("mealdesc =", mealdesc);
+                                //Mojo.Log.info("mealcategory =", mealcategory);
+                                //Mojo.Log.info("mealdesc =", mealdesc);
                                 var imgstring = meal.firstChild.getAttribute('SRC');
                                 ind = imgstring.lastIndexOf("/");
                                 var mealimg = imgstring.slice(ind + 1);
@@ -277,11 +218,11 @@ MainAssistant.prototype.sendRequest = function(url, firstRun) {
                             essenArray.push(mealrecord);
                         }
 
-                        // add meals for a specified day to db
-			Mensaplan.depot.add(numericdate, essenArray);
+                        // add meals for a specified day to array
+                        myapp.menus[numericdate] = essenArray;
 
                         // add date to keys
-			myapp.keyArray.push(numericdate);
+			myapp.keys.push(numericdate);
                     }
 
                 }
@@ -295,13 +236,14 @@ MainAssistant.prototype.sendRequest = function(url, firstRun) {
 		if (firstRun) {
                     // get next week
 		    var week = myapp.getKalenderwoche(1);
-                    myapp.sendRequest(myapp.getMensaBaseURL(myapp.mensa) + week, false);
+                    myapp.sendRequest(myapp.getMensaBaseURL(Mensaplan.prefs.mensa) + week, false);
 		} else {
 		    // cancel timout
 		    myapp.controller.window.clearTimeout(myapp.timer);
 
 		    // add to db
-		    Mensaplan.depot.add("keys", myapp.keyArray);
+		    Mensaplan.depot.add("keys", myapp.keys);
+                    Mensaplan.depot.add("menus", myapp.menus);
 
 		    // refresh view
 		    Mensaplan.depot.get("keys", myapp.dbGetKeysSuccess.bind(myapp),
@@ -312,21 +254,6 @@ MainAssistant.prototype.sendRequest = function(url, firstRun) {
         this.xmlHttp.send(null);
     }
 }
-
-
-/* TODO: still necessary??? */
-MainAssistant.prototype.getDatum = function() {
-    var date = new Date();
-    var dd = date.getDate();
-    var mm = date.getMonth() + 1;
-    var yy = date.getFullYear();
-    var day = date.getDay();
-//    var daylist = new Array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
-    var daylist = Mojo.Locale.getDayNames('long');
-    var datumString = daylist[day] + ", " + dd + "." + mm + "." + yy;
-    return datumString;
-}
-
 
 MainAssistant.prototype.dbConnectionSuccess = function() {
     Mojo.Log.info("DB successfully loaded.");
@@ -369,7 +296,7 @@ MainAssistant.prototype.displayEntry = function() {
     this.controller.get('essenListe').innerHTML = "";
     this.controller.get('essenDatum').innerText = daylist[weekday] + ", " + currentDay;
 
-    Mensaplan.depot.get(this.days[this.current], this.dbDisplayEntry.bind(this),
+    Mensaplan.depot.get("menus", this.dbDisplayEntry.bind(this),
                    function(error) {
                        Mojo.Controller.errorDialog("Can't get values (#" + error.message + ").");
                    });
@@ -377,18 +304,20 @@ MainAssistant.prototype.displayEntry = function() {
 
 MainAssistant.prototype.dbDisplayEntry = function(result) {
     if (result != null) {
-        for (var i = 0; i < result.length; i++) {
-            var essen = result[i];
+        var menu = result[this.days[this.current]];
+        Mojo.Log.info("dbDisplayEntry(): result =", result, "menu =", menu);
+        for (var i = 0; i < menu.length; i++) {
+            var essen = menu[i];
             var titlestring = $L(essen.title);
             var descstring = essen.desc;
             var imgstring = essen.img;
 
 	    // test for filter
-	    if (this.filterFood) {
+	    if (Mensaplan.prefs.filterFood) {
 		var found = false;
-		for (var j = 0; j < this.filterWords.length; j++) {
-		    var filterWord = this.filterWords[j].data;
-		    if (this.wholeWords)
+		for (var j = 0; j < Mensaplan.prefs.filterWords.length; j++) {
+		    var filterWord = Mensaplan.prefs.filterWords[j].data;
+		    if (Mensaplan.prefs.wholeWords)
 			filterWord = "\\b" + filterWord + "\\b";
 		    var expression = new RegExp(filterWord, "i");
 		    // search in description
@@ -402,7 +331,7 @@ MainAssistant.prototype.dbDisplayEntry = function(result) {
 		    continue;
 	    }
 
-            var imgHTML = (this.showImages && imgstring.toLowerCase() != "frei.gif" ) ?
+            var imgHTML = (Mensaplan.prefs.showImages && imgstring.toLowerCase() != "frei.gif" ) ?
                 '<div class="food-icon">' +
                 '<img src="images/' +
                 imgstring +
@@ -444,12 +373,12 @@ MainAssistant.prototype.dbGetKeysFailure = function(error) {
     Mojo.Controller.errorDialog("Can't get keys (#" + error.message + ")."); 
 }
 
-MainAssistant.prototype.dbRemoveAllSuccess = function() {
-    Mojo.Log.info("DB successfully cleared.");
+MainAssistant.prototype.dbDiscardSuccess = function() {
+    Mojo.Log.info("Key successfully discarded from DB.");
 }
 
-MainAssistant.prototype.dbRemoveAllFailure = function(transaction, result){
-    Mojo.Controller.errorDialog("Can't clear database (#" + result.message + ")."); 
+MainAssistant.prototype.dbDiscardFailure = function(transaction, result){
+    Mojo.Controller.errorDialog("Can't discard key from DB (#" + result.message + ")."); 
 }
 
 
@@ -564,7 +493,10 @@ MainAssistant.prototype.getElementsByTagAndClass = function(element, tag, class)
 
 
 MainAssistant.prototype.clearDB = function() {
-    Mensaplan.depot.removeAll(this.dbRemoveAllSuccess, this.dbConnectionFailure);
+    Mensaplan.depot.discard("keys", this.dbDiscardSuccess, this.dbDiscardFailure);
+    Mensaplan.depot.discard("menus", this.dbDiscardSuccess, this.dbDiscardFailure);
+    this.keys.length = 0;
+    this.menus.length = 0;
     this.controller.get("essenListe").innerHTML = "";
     this.controller.get("essenDatum").innerText = this.noDataString;
     this.current = -1;
