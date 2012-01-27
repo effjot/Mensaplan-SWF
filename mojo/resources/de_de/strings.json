@@ -6,23 +6,47 @@
   "Preferences":     "Einstellungen",
   "About":           "Über",
   "today":           "heute",
-  "Copyright 2011 code-devils.de and": "Copyright 2011 code-devils.de und",
+  "Copyright 2009–2012 code-devils.de and": "Copyright 2009–2012 code-devils.de und",
+  "Menus for the five mensas of the":
+    "Menus für die fünf Mensen des",
   "Menus taken from the website of the":
-      "Speisepläne abgerufen von der Webseite des",
+    "Speisepläne abgerufen von der Webseite des",
   "Studentenwerk Frankfurt":
-      "Studentenwerks Frankfurt",
+    "Studentenwerks Frankfurt",
+  "Support and development:":
+    "Unterstützung und Entwicklung:",
+  "webOS Nation forum": "webOS Nation Forum",
   "Delete downloaded menus?":
       "Heruntergeladene Speisepläne löschen?",
   "No internet connection available.": "Keine Internetverbindung verfügbar.",
   "Timeout reached. Couldn't download data.":
-      "Zeitüberschreitung, konnte keine Daten herunterladen",
+    "Zeitüberschreitung, konnte keine Daten herunterladen",
   "Malformed website content: no date field found.":
-      "Inhalt der Website entspricht nicht erwartetem Aufbau: kein Datumsfeld gefunden.",
+    "Inhalt der Website entspricht nicht erwartetem Aufbau: kein Datumsfeld gefunden.",
   "Webpage couldn't be found.": "Webseite konnte nicht gefunden werden.",
   "Words":           "Wörter",
   "Yes":             "Ja",
   "No":              "Nein",
   "Show":            "zeigen",
   "Hide":            "keine",
-  "Add…":            "Hinzufügen…"
+  "Add…":            "Hinzufügen…",
+  "More info / change log": "Weitere Informationen",
+  "Welcome to <em>Mensa Menu SWF</em>":
+    "Willkommen beim <em>Mensaplan SWF</em>",
+  "This app displays student dining hall (Mensa) menus for various universities in Brandenburg, Germany which are operated by the Studentenwerk Frankfurt/Oder: Cottbus (BTU and HL), Senftenberg, Eberswalde, Frankfurt.  Includes a filtering option – you can hide meals using arbitrary keywords.  Menus for the current and next week are stored on your device, so you don't need internet connection after updating the database.  Flick left/right or use the arrows to change the date.":
+    "Diese App zeigt Speisepläne der einzelnen Mensen des Studentenwerks Frankfurt: Cottbus (BTU und HL), Senftenberg, Eberswale, Frankfurt.  Es gibt eine Filterfunktion – Gerichte mit frei wählbaren Schlüssel&shy;wörtern können ausgeblendet werden.  Die Speisepläne der aktuellen und nächsten Woche werden auf dem Gerät gespeichert, so daß nach dem Update keine Internetverbindung nötig ist.  Wechsel zu anderen Tagen über Links/Rechts-Wischen oder die Pfeile.",
+  "Scroll down to see what's new in this version.":
+    "Neuigkeiten in dieser Version stehen weiter unten.",
+  "Dear user,":      "Lieber Nutzer,",
+  "I would like to publish a “finished” 1.0 version of this app soon.  Please have a look at it and send bug reports or other suggestions. I would be very happy to hear from you on the development forum – just follow the link in the “About” app menu entry.":
+  "in naher Zukunft möchte ich gerne eine „fertige“ Version 1.0 dieser App heraus&shy;bringen.  Bitte schauen Sie sich die App an und senden Sie mir Fehlerberichte und Verbesserungsvorschläge.  Ich würde mich über Rückmeldungen im Ent&shy;wicklungs&shy;forum sehr freuen – der Link findet sich im Menüeintrag „Über“.",
+  "This app builds upon the “MensaPlan BTU” app by ":
+    "Diese App baut auf der App “MensaPlan BTU” von ",
+  ", which had no longer been maintained and didn't work any more.  I didn't manage to get into contact with the author by various means and for a long time, so I finally decided to fork his code (GPLv2) and to publish my extensions.":
+    " auf, die nicht mehr weiterentwickelt wurde und auch nicht mehr funktionierte.  Es gelang mir leider nicht, Kontakt zum Autor aufzunehmen, obwohl ich es auf verschiedenen Wegen eine lange Zeit probiert habe.  Darum hab ich mich nun entschieden, seinen Code (GPLv2) abzuspalten und meine Erweitertungen selbst zu veröffentlichen.",
+  "Thanks, and enjoy this app!":
+    "Dankeschön, und viel Spaß mit der App!",
+  "Change Log":        "Versionshinweise (nur auf Englisch)",
+  "Ok, I've read this. Let's continue…":
+    "Ok, ich habe es gelesen. Fortfahren…",
 }
