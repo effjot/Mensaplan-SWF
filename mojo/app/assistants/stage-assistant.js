@@ -1,5 +1,3 @@
-
-
 function StageAssistant() {
     /* this is the creator function for your stage assistant object */
 
@@ -11,7 +9,7 @@ function StageAssistant() {
         + "<a href='" + Mojo.Controller.appInfo.vendorurl + "'>"
         + Mojo.Controller.appInfo.vendorurl + "</a><br>"
         + "<div style='clear: both'>"
-        + $L("Menus for the 5 mensas of the") + " "
+        + $L("Menus for the five mensas of the") + " "
         + "<a href='http://www.studentenwerk-frankfurt.de/'>"
         + $L("Studentenwerk Frankfurt") + "</a>."
         + "<br>"
@@ -33,7 +31,7 @@ function StageAssistant() {
         filterWords: new Array(),
         wholeWords:  true,          // Match only full words in filter?
         showWelcome: true           // Show welcome message and changelog? (At first start)
-    }
+    };
 
     Mensaplan.storePrefs = function() {
         Mojo.Log.info("Storing prefs to DB.");
@@ -44,7 +42,7 @@ function StageAssistant() {
 		            function(event) {
 			        Mojo.Log.info("Prefs DB failure: %j", event);
 	                    });
-    }
+    };
 
     // app menu
 
@@ -52,10 +50,10 @@ function StageAssistant() {
 
     Mensaplan.appMenuModel = {
         items: [                // Attention! Indices 0 and 1 are hardcoded in main-assistant.
-            { label: $L("Update"), command: "do-update", disabled: true },
+            { label: $L("Update"),         command: "do-update",   disabled: true },
             { label: $L("Clear Database"), command: "do-clear-db", disabled: false },
-            { label: $L("Preferences"), command: "do-prefs", disabled: false },
-            { label: $L("About"), command: "do-about", disabled: false }
+            { label: $L("Preferences"),    command: "do-prefs",    disabled: false },
+            { label: $L("About"),          command: "do-about",    disabled: false }
         ]
     };
     Mensaplan.appMenuModelOnlyAbout = {
@@ -63,11 +61,11 @@ function StageAssistant() {
             { label: $L("About"), command: "do-about" }
         ]
     };
-    Mensaplan.appMenuModelRestricted =  {
+    Mensaplan.appMenuModelRestricted = {
         items: [
             { label: $L("About"), command: "do-about-restricted" }
         ]
-    };
+    }
 }
 
 
@@ -94,11 +92,11 @@ StageAssistant.prototype.dbConnectionSuccess = function() {
     Mojo.Log.info("DB successfully connected.");
     Mensaplan.depot.get("prefs", this.getPrefs.bind(this),
  this.dbFailure.bind(this));
-};
+}
 
 StageAssistant.prototype.dbFailure = function(event) {
     Mojo.Controller.errorDialog("Database failure: %j.", event);
-};
+}
 
 StageAssistant.prototype.getPrefs = function(args) {
     if (args) {
@@ -114,8 +112,7 @@ StageAssistant.prototype.getPrefs = function(args) {
         this.controller.pushScene("welcome", true);
     else
         this.controller.pushScene("main");
-};
-
+}
 
 
 /* Handle "About" menu */
@@ -161,4 +158,4 @@ StageAssistant.prototype.handleCommand = function(event) {
             break;
         }
     }
-};
+}
