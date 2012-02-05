@@ -1,0 +1,9 @@
+in novaterm:
+
+luna-send -n 1 luna://com.palm.systemmanager/takeScreenShot '{"file":"screenshot.png"}'
+
+
+auf lokaler Shell:
+
+scp -P 5522 root@localhost:/var/home/root/screenshots.tar /tmp
+
