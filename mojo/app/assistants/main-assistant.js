@@ -203,9 +203,13 @@ MainAssistant.prototype.sendRequest = function(url, firstRun) {
                                 essenArray.push(mealrecord);
                             }
                         } else {
-                            // no meals (Mensa closed?) --> message is in date div
-                            var message = fulldate[0].childNodes[1].firstChild.innerText;
-                            Mojo.Log.info("no meals; message =", message);
+                            // no meals (Mensa closed?)
+                            Mojo.Log.info("no meals");
+                            // maybe message in date div?
+                            var message = $L("No menu – Mensa closed?");
+                            if (fulldate[0].childnodes)
+                                message = fulldate[0].childNodes[1].firstChild.innerText;
+                            Mojo.Log.info("no meals message =", message);
                             var mealrecord = new Meal("", message, "warning-icon.png");
                             essenArray.push(mealrecord);
                         }
