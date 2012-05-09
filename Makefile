@@ -1,5 +1,5 @@
 APPNAME=net.effjot.mensaplanswf
-VERSION=0.9.0
+VERSION=0.9.1
 
 MOJOIPK=$(APPNAME)_$(VERSION)_all.ipk
 
