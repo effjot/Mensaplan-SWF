@@ -24,6 +24,8 @@
   "Malformed website content: no date field found.":
     "Inhalt der Website entspricht nicht erwartetem Aufbau: kein Datumsfeld gefunden.",
   "Webpage couldn't be found.": "Webseite konnte nicht gefunden werden.",
+  "No menu – Mensa closed?":
+    "Kein Speiseplan – Mensa geschlossen?",
   "Words":           "Wörter",
   "Yes":             "Ja",
   "No":              "Nein",
