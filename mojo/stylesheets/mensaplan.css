@@ -13,6 +13,11 @@
 }
 
 
+/* Hide/show Update button */
+.hide { display: none !important; }
+.show { display: block !important; }
+
+
 /* Scroll Fades */
 
 /* html, body { */
