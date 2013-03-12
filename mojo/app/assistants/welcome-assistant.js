@@ -26,6 +26,7 @@ function WelcomeAssistant(atStartup) {
 
     // change log
     this.changeLog = [
+	{ version: "0.9.2", log: [ "Small improvement: update button and spinner do no longer briefly appear (“flicker”) at startup." ] },
 	{ version: "0.9.1", log: [ "Fixed bug: days without menu and without “Mensa closed” message caused the parser to hang during update." ] },
 	{ version: "0.9.0", log: [ "Pre3 support",
                                    "Welcome message and changelog at first startup (code from Preware app – thanks!) and from About info.",
