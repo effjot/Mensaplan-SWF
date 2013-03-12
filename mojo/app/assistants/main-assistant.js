@@ -15,7 +15,7 @@ MainAssistant.prototype.setup = function() {
     // title
     this.controller.get('essenDatum').innerText = this.noDataString;
 
-    // update button
+    // update button (disabled at startup; will be enabled and shown by dbGetKeysSuccess)
     this.buttonAttributes = {};
     this.buttonModel = { label: $L('Update'), buttonClass: 'primary', disabled: true };
     this.controller.setupWidget("buttonUpdate", this.buttonAttributes, this.buttonModel);
@@ -35,12 +35,12 @@ MainAssistant.prototype.setup = function() {
 
     // spinner
     this.spinner = this.controller.get('spin-scrim');
-    this.spinner.show();
+    this.spinner.hide();
     this.spinnerAttrs = {
         spinnerSize: 'large'
     }
     this.spinnerModel = {
-            spinning: true
+            spinning: false
     };
     this.controller.setupWidget('feedSpinner', this.spinnerAttrs, this.spinnerModel);
 
@@ -52,7 +52,6 @@ MainAssistant.prototype.setup = function() {
 MainAssistant.prototype.activate = function() {
     Mensaplan.depot.get("keys", this.dbGetKeysSuccess.bind(this), this.dbGetKeysFailure.bind(this));
     this.updateCommandMenu();
-    //this.setButtonStatus(false);
     Mojo.Event.listen(this.controller.get('buttonUpdate'),
                       Mojo.Event.tap, this.updateHandler);
     Mojo.Event.listen(this.controller.document,
@@ -95,13 +94,13 @@ MainAssistant.prototype.update = function(event) {
 
 MainAssistant.prototype.cancelDownload = function() {
     this.xmlHttp.abort();
-    this.setButtonStatus(false);
+    this.indicateUpdateIsRunning(false);
     Mojo.Controller.errorDialog($L("Timeout reached. Couldn't download data."));
 }
 
 MainAssistant.prototype.hasInternet = function() {
     // disable buttons
-    this.setButtonStatus(true);
+    this.indicateUpdateIsRunning(true);
 
     // clear old data
     // FIXME: check for error in sendRequest, keep old menu if download failed
@@ -172,7 +171,7 @@ MainAssistant.prototype.sendRequest = function(url, firstRun) {
                         if (fulldate.length != 1) {
                             myapp.controller.window.clearTimeout(myapp.timer);
                             Mojo.Controller.errorDialog($L("Malformed website content: no date field found."));
-                            myapp.setButtonStatus(false);
+                            myapp.indicateUpdateIsRunning(false);
                             return;
                         }
                         var numericdate = fulldate[0].firstChild.nodeValue.slice(-10);
@@ -225,7 +224,7 @@ MainAssistant.prototype.sendRequest = function(url, firstRun) {
                 else {
 		    myapp.controller.window.clearTimeout(myapp.timer);
                     Mojo.Controller.errorDialog($L("Webpage couldn't be found."));
-                    myapp.setButtonStatus(false);
+                    myapp.indicateUpdateIsRunning(false);
                     return;
                 }
 
@@ -267,16 +266,15 @@ MainAssistant.prototype.dbGetKeysSuccess = function(result) {
         if (this.current == -1) {
             // current date not in DB, so show the last entry
 	    this.current = result.length - 1;
-	    this.setButtonStatus(false);
-	    return;
+        } else {
+            this.maximum = result.length;
+            this.days = result;
+            this.displayEntry();
         }
-
-        this.maximum = result.length;
-        this.days = result;
-        this.displayEntry();
+    } else {
+        this.controller.get('buttonUpdate').setAttribute("class", "show");
     }
-
-    this.setButtonStatus(false);
+    this.indicateUpdateIsRunning(false);
 }
 
 MainAssistant.prototype.displayEntry = function() {
@@ -361,12 +359,12 @@ MainAssistant.prototype.dbDisplayEntry = function(result) {
 	this.updateCommandMenu();
 
 	// hide update button
-	this.controller.get('buttonUpdate').style.display = "none";
+        this.controller.get('buttonUpdate').setAttribute("class", "hide");
     }
 }
 
 MainAssistant.prototype.dbGetKeysFailure = function(error) {
-    Mojo.Controller.errorDialog("Can't get keys (#" + error.message + ")."); 
+    Mojo.Controller.errorDialog("Can't get keys (#" + error.message + ").");
 }
 
 MainAssistant.prototype.dbDiscardSuccess = function() {
@@ -374,7 +372,7 @@ MainAssistant.prototype.dbDiscardSuccess = function() {
 }
 
 MainAssistant.prototype.dbDiscardFailure = function(transaction, result){
-    Mojo.Controller.errorDialog("Can't discard key from DB (#" + result.message + ")."); 
+    Mojo.Controller.errorDialog("Can't discard key from DB (#" + result.message + ").");
 }
 
 
@@ -428,6 +426,7 @@ MainAssistant.prototype.handleCommand = function(event) {
     }
 }
 
+
 MainAssistant.prototype.updateCommandMenu = function() {
     if (this.current <= 0) {
         this.commandMenuModel.items[0].disabled = true;
@@ -447,23 +446,26 @@ MainAssistant.prototype.updateCommandMenu = function() {
     this.controller.modelChanged(this.commandMenuModel);
 }
 
-MainAssistant.prototype.setButtonStatus = function(status) {
-    Mojo.Log.info("setButtonStatus(", status, ")");
+
+/* When update is running: hide/disable "Update" button and menu
+   command; disable "Clear DB" menu command; show spinner */
+
+MainAssistant.prototype.indicateUpdateIsRunning = function(status) {
+    Mojo.Log.info("indicateUpdateIsRunning(", status, ")");
 
     // button
-    Mojo.Log.info("setButtonStatus(): button");
-
+    Mojo.Log.info("indicateUpdateIsRunning(): button");
     this.buttonModel.disabled = status;
     this.controller.modelChanged(this.buttonModel, this);
 
     // menu
-    Mojo.Log.info("setButtonStatus(): menu; ignore spurious warning logged below!");
+    Mojo.Log.info("indicateUpdateIsRunning(): menu; ignore spurious warning logged below!");
     Mensaplan.appMenuModel.items[0].disabled = status;
     Mensaplan.appMenuModel.items[1].disabled = status;
     this.controller.modelChanged(Mensaplan.appMenuModel, this);
 
     // spinner
-    Mojo.Log.info("setButtonStatus(): spinner");
+    Mojo.Log.info("indicateUpdateIsRunning(): spinner");
     if (status)
         this.spinner.show();
     else
@@ -502,7 +504,9 @@ MainAssistant.prototype.clearDB = function() {
     var scroller = Mojo.View.getScrollerForElement(this.controller.get("essenListe"));
     scroller.mojo.revealTop(0);
     this.updateCommandMenu();
-    this.controller.get("buttonUpdate").style.display = "block";
+
+    // show button
+    this.controller.get('buttonUpdate').setAttribute("class", "show");
 }
 
 
