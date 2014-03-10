@@ -8,11 +8,11 @@ function PreferencesAssistant(mainScene) {
     this.selectorMensaAttrib = {
         label: $L("Mensa"),
         choices: [
-            { label: $L("Cottbus (BTU)"), value: "CottbusBTU" },
-            { label: $L("Cottbus (HL)"),  value: "CottbusHL" },
+            { label: $L("BTU (Cottbus Zentralcampus)"), value: "CottbusBTU" },
+            { label: $L("BTU (Sachsendorf)"), value: "CottbusHL" },
+            { label: $L("BTU (Senftenberg)"), value: "Senftenberg" },
             { label: $L("Eberswalde"),    value: "Eberswalde" },
-            { label: $L("Frankfurt"),     value: "Frankfurt" },
-            { label: $L("Senftenberg"),   value: "Senftenberg" }
+            { label: $L("Frankfurt"),     value: "Frankfurt" }
         ]
     };
     this.selectorMensaModel = {
@@ -45,7 +45,7 @@ PreferencesAssistant.prototype.setup = function() {
 	};
 	this.controller.setupWidget("togglebuttonImg", this.toggleattsShowImages, this.togglemodelShowImages);
     Mojo.Event.listen(this.controller.get('togglebuttonImg'), Mojo.Event.propertyChange, this.togglechangeShowImages.bindAsEventListener(this));
-	
+
 	// filter food
 	this.toggleattsFilterFood = {
 	    trueLabel: $L('Yes'),
@@ -67,7 +67,7 @@ PreferencesAssistant.prototype.setup = function() {
 	};
 	this.controller.setupWidget("togglebuttonWhole", this.toggleattsWholeWords, this.togglemodelWholeWords);
     Mojo.Event.listen(this.controller.get('togglebuttonWhole'), Mojo.Event.propertyChange, this.togglechangeWholeWords.bindAsEventListener(this));
-	
+
     /* set the widget up here */
     var textfieldAttributes = {
         focusMode: Mojo.Widget.focusSelectMode,
@@ -79,11 +79,11 @@ PreferencesAssistant.prototype.setup = function() {
         disabled: false
     };
     this.controller.setupWidget('filterListItem', textfieldAttributes, this.textfieldModel);
-	
+
 	// Set up a few models so we can test setting the widget model
 	//this.wordsModel = {listTitle:$L('Words'), items: this.mainScene.filterWords};
 	this.wordsModel = {listTitle:$L('Words'), items: Mensaplan.prefs.filterWords};
-	
+
 	// Set up the attributes & model for the List widget
 	this.controller.setupWidget('wordsList', 
 					      {	itemTemplate: 'preferences/listitem', 
@@ -92,7 +92,7 @@ PreferencesAssistant.prototype.setup = function() {
 						 	emptyTemplate: 'preferences/emptylist',
 							addItemLabel: $L('Add…')},
 					      this.wordsModel);
-	
+
 	// Watch relevant list events
 	this.wordsList = this.controller.get('wordsList');
 	Mojo.Event.listen(this.wordsList, Mojo.Event.listAdd, this.listAddHandler.bindAsEventListener(this));
@@ -134,7 +134,7 @@ PreferencesAssistant.prototype.cleanup = function(event) {
 	Mojo.Event.stopListening(this.controller.get('togglebuttonImg'), Mojo.Event.propertyChange, this.togglechangeShowImages)	
 	Mojo.Event.stopListening(this.controller.get('togglebuttonFilter'), Mojo.Event.propertyChange, this.togglechangeFilterFood)
 	Mojo.Event.stopListening(this.controller.get('togglebuttonWhole'), Mojo.Event.propertyChange, this.togglechangeFilterFood)
-	
+
 	Mojo.Event.stopListening(this.wordsList, Mojo.Event.listChange, this.listChangeHandler);
 	Mojo.Event.stopListening(this.wordsList, Mojo.Event.listAdd, this.listAddHandler);
 	Mojo.Event.stopListening(this.wordsList, Mojo.Event.listDelete, this.listDeleteHandler);
@@ -168,4 +168,3 @@ PreferencesAssistant.prototype.processWords = function() {
     Mensaplan.prefs.filterWords = this.wordsModel.items;
     Mensaplan.storePrefs();
 }
-
