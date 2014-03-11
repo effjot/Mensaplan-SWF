@@ -14,7 +14,7 @@ function WelcomeAssistant(atStartup) {
 
     // on first start, this message is displayed, along with the current version message from below
     this.welcomeMessages = [
-        $L("This app displays student dining hall (Mensa) menus for various universities in Brandenburg, Germany which are operated by the Studentenwerk Frankfurt/Oder: Cottbus (BTU and HL), Senftenberg, Eberswalde, Frankfurt.  Includes a filtering option – you can hide meals using arbitrary keywords.  Menus for the current and next week are stored on your device, so you don't need internet connection after updating the database.  Flick left/right or use the arrows to change the date."),
+        $L("This app displays student dining hall (Mensa) menus for various universities in Brandenburg, Germany which are operated by the Studentenwerk Frankfurt/Oder: BTU (Cottbus Central Campus, Sachsendorf, Senftenberg), Eberswalde, Frankfurt.  Includes a filtering option – you can hide meals using arbitrary keywords.  Menus for the current and next week are stored on your device, so you don't need internet connection after updating the database.  Flick left/right or use the arrows to change the date."),
         "<strong>" + $L("Scroll down to see what's new in this version.") + "</strong>",
         "<em>" + $L("Dear user,") + "<br>",
         $L("I would like to publish a “finished” 1.0 version of this app soon.  Please have a look at it and send bug reports or other suggestions. I would be very happy to hear from you on the development forum – just follow the link in the “About” app menu entry.") + "</em>",
@@ -26,6 +26,8 @@ function WelcomeAssistant(atStartup) {
 
     // change log
     this.changeLog = [
+	{ version: "0.9.3", log: [ "Use new names of the BTU campuses.",
+                                   "Added icon for veal." ] },
 	{ version: "0.9.2", log: [ "Small improvement: update button and spinner do no longer briefly appear (“flicker”) at startup." ] },
 	{ version: "0.9.1", log: [ "Fixed bug: days without menu and without “Mensa closed” message caused the parser to hang during update." ] },
 	{ version: "0.9.0", log: [ "Pre3 support",
